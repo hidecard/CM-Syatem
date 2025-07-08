@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="database.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1986"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="0" parent="0"/><expanded_item id="1" parent="0"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Status" custom_title="0" dock_id="2" table="4,6:mainStatus"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000002fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000000000000000fb000000160064006f0063006b00420072006f00770073006500320100000000ffffffff0000011800ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">CREATE TABLE Status (
+    status_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    status_name TEXT NOT NULL UNIQUE -- e.g., 'Posted', 'Revised'
+);
+
+CREATE TABLE Content (
+    content_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT,
+    status_id INTEGER NOT NULL,
+    deadline DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (status_id) REFERENCES Status(status_id)
+);
+
+
+INSERT INTO Status (status_name) VALUES ('Posted');
+INSERT INTO Status (status_name) VALUES ('Revised');
+
+INSERT INTO Content (title, description, status_id, deadline) VALUES (
+    'Sample Facebook Post',
+    'This is a sample post description for a social media platform, promoting a new event.',
+    1,
+    '2024-10-05'
+);
+INSERT INTO Content (title, description, status_id, deadline) VALUES (
+    'Product Launch Announcement',
+    'Announcing our new product with exciting features! Stay tuned for more updates.',
+    2,
+    '2024-10-10'
+);
+
+
+SELECT 
+    c.content_id,
+    c.title,
+    c.description,
+    s.status_name,
+    c.deadline,
+    c.created_at,
+    c.updated_at
+FROM Content c
+JOIN Status s ON c.status_id = s.status_id
+ORDER BY c.created_at DESC
+LIMIT 10;</sql><current_tab id="0"/></tab_sql></sqlb_project>
